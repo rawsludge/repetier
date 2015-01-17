@@ -36,7 +36,9 @@ uint8_t Extruder::dittoMode = 0;
 #endif
 
 #ifdef SUPPORT_MAX6675
+uint16_t tempUpdateCycle=0;
 extern int16_t read_max6675(uint8_t ss_pin);
+extern uint16_t readMax6675(uint8_t ss, uint8_t sck, uint8_t dataPin);
 #endif
 #ifdef SUPPORT_MAX31855
 extern int16_t read_max31855(uint8_t ss_pin);
@@ -304,6 +306,12 @@ void Extruder::initExtruder()
             WRITE(SS,HIGH);
             HAL::digitalWrite(act->tempControl.sensorPin,1);
             HAL::pinMode(act->tempControl.sensorPin,OUTPUT);
+        }
+        if( act->tempControl.sensorType==110 )
+        {
+            HAL::pinMode(act->tempControl.ssPin,OUTPUT);          
+            HAL::pinMode(act->tempControl.sckPin,OUTPUT);          
+            HAL::pinMode(act->tempControl.sensorPin,INPUT);          
         }
 #endif
     }
@@ -637,6 +645,14 @@ void TemperatureController::updateCurrentTemperature()
     case 101: // MAX6675
         currentTemperature = read_max6675(sensorPin);
         break;
+    case 110:
+        if( tempUpdateCycle % 3 == 0 ) 
+        {
+          currentTemperature = readMax6675(ssPin, sckPin, sensorPin);
+          tempUpdateCycle = 0;
+        }
+        tempUpdateCycle ++;
+        break;
 #endif
 #ifdef SUPPORT_MAX31855
     case 102: // MAX31855
@@ -727,6 +743,7 @@ void TemperatureController::updateCurrentTemperature()
         break;
 #ifdef SUPPORT_MAX6675
     case 101: // MAX6675
+    case 110:
         currentTemperatureC = (float)currentTemperature /4.0;
         break;
 #endif
@@ -858,6 +875,7 @@ void TemperatureController::setTargetTemperature(float target)
         break;
 #ifdef SUPPORT_MAX6675
     case 101:  // defined HEATER_USES_MAX6675
+    case 110:
         targetTemperature = temp * 4;
         break;
 #endif
@@ -1100,7 +1118,7 @@ bool reportTempsensorError()
 int16_t read_max6675(uint8_t ss_pin)
 {
     int16_t max6675_temp = 0;
-    HAL::spiInit(1);
+    HAL::spiInit(2);
     HAL::digitalWrite(ss_pin, 0);  // enable TT_MAX6675
     HAL::delayMicroseconds(1);    // ensure 100ns delay - a bit extra is fine
     max6675_temp = HAL::spiReceive(0);
@@ -1109,6 +1127,41 @@ int16_t read_max6675(uint8_t ss_pin)
     HAL::digitalWrite(ss_pin, 1);  // disable TT_MAX6675
     return max6675_temp & 4 ? 2000 : max6675_temp >> 3; // thermocouple open?
 }
+
+uint8_t spiread(uint8_t sck, uint8_t dataPin) {
+    int i;
+    byte d = 0;
+    
+    for (i=7; i>=0; i--)
+    {
+        HAL::digitalWrite(sck, LOW);
+        HAL::delayMilliseconds(10);
+        if ( HAL::digitalRead(dataPin)) {
+            //set the bit to 0 no matter what
+            d |= (1 << i);
+        }        
+        HAL::digitalWrite(sck, HIGH);
+        HAL::delayMilliseconds(10);
+    }
+    return d;
+}
+
+uint16_t readMax6675(uint8_t ss, uint8_t sck, uint8_t dataPin)
+{   
+    uint16_t max6675_temp;
+    
+    HAL::digitalWrite(ss, LOW);
+    HAL::delayMilliseconds(1);
+    
+    max6675_temp = spiread(sck, dataPin);
+    max6675_temp <<= 8;
+    max6675_temp |= spiread(sck, dataPin);
+    
+    HAL::digitalWrite(ss, HIGH);
+    
+    return max6675_temp & 4 ? 2000 : max6675_temp >> 3; // thermocouple open?
+}
+
 #endif
 #ifdef SUPPORT_MAX31855
 int16_t read_max31855(uint8_t ss_pin)
@@ -1175,29 +1228,25 @@ Extruder extruder[NUM_EXTRUDER] =
 {
 #if NUM_EXTRUDER>0
     {
-        0,EXT0_X_OFFSET,EXT0_Y_OFFSET,EXT0_STEPS_PER_MM,EXT0_ENABLE_PIN,EXT0_ENABLE_ON,
-        EXT0_MAX_FEEDRATE,EXT0_MAX_ACCELERATION,EXT0_MAX_START_FEEDRATE,0,EXT0_WATCHPERIOD
-        ,EXT0_WAIT_RETRACT_TEMP,EXT0_WAIT_RETRACT_UNITS
+        0, EXT0_X_OFFSET, EXT0_Y_OFFSET, EXT0_STEPS_PER_MM, EXT0_ENABLE_PIN, EXT0_ENABLE_ON, EXT0_MAX_FEEDRATE, EXT0_MAX_ACCELERATION, EXT0_MAX_START_FEEDRATE, 0, EXT0_WATCHPERIOD, EXT0_WAIT_RETRACT_TEMP, EXT0_WAIT_RETRACT_UNITS
 #ifdef USE_ADVANCE
 #ifdef ENABLE_QUADRATIC_ADVANCE
         ,EXT0_ADVANCE_K
 #endif
-        ,EXT0_ADVANCE_L,EXT0_ADVANCE_BACKLASH_STEPS
+        ,EXT0_ADVANCE_L, EXT0_ADVANCE_BACKLASH_STEPS
 #endif
         ,{
-            0,EXT0_TEMPSENSOR_TYPE,EXT0_SENSOR_INDEX,0,0,0,0,0,EXT0_HEAT_MANAGER
+            0, EXT0_TEMPSENSOR_TYPE, EXT0_SENSOR_INDEX, EXT0_TEMPSENSOR_SCK_PIN, EXT0_TEMPSENSOR_SS_PIN, 0, 0, 0, 0, 0, EXT0_HEAT_MANAGER
 #ifdef TEMP_PID
-            ,0,EXT0_PID_INTEGRAL_DRIVE_MAX,EXT0_PID_INTEGRAL_DRIVE_MIN,EXT0_PID_P,EXT0_PID_I,EXT0_PID_D,EXT0_PID_MAX,0,0,0,{0,0,0,0}
+            ,0, EXT0_PID_INTEGRAL_DRIVE_MAX, EXT0_PID_INTEGRAL_DRIVE_MIN, EXT0_PID_P, EXT0_PID_I, EXT0_PID_D, EXT0_PID_MAX, 0, 0, 0, {0,0,0,0}
 #endif
         ,0}
-        ,ext0_select_cmd,ext0_deselect_cmd,EXT0_EXTRUDER_COOLER_SPEED,0
+        ,ext0_select_cmd, ext0_deselect_cmd, EXT0_EXTRUDER_COOLER_SPEED, 0
     }
 #endif
 #if NUM_EXTRUDER>1
     ,{
-        1,EXT1_X_OFFSET,EXT1_Y_OFFSET,EXT1_STEPS_PER_MM,EXT1_ENABLE_PIN,EXT1_ENABLE_ON,
-        EXT1_MAX_FEEDRATE,EXT1_MAX_ACCELERATION,EXT1_MAX_START_FEEDRATE,0,EXT1_WATCHPERIOD
-        ,EXT1_WAIT_RETRACT_TEMP,EXT1_WAIT_RETRACT_UNITS
+        1, EXT1_X_OFFSET, EXT1_Y_OFFSET, EXT1_STEPS_PER_MM, EXT1_ENABLE_PIN, EXT1_ENABLE_ON, EXT1_MAX_FEEDRATE, EXT1_MAX_ACCELERATION, EXT1_MAX_START_FEEDRATE, 0, EXT1_WATCHPERIOD, EXT1_WAIT_RETRACT_TEMP, EXT1_WAIT_RETRACT_UNITS
 #ifdef USE_ADVANCE
 #ifdef ENABLE_QUADRATIC_ADVANCE
         ,EXT1_ADVANCE_K
@@ -1215,9 +1264,7 @@ Extruder extruder[NUM_EXTRUDER] =
 #endif
 #if NUM_EXTRUDER>2
     ,{
-        2,EXT2_X_OFFSET,EXT2_Y_OFFSET,EXT2_STEPS_PER_MM,EXT2_ENABLE_PIN,EXT2_ENABLE_ON,
-        EXT2_MAX_FEEDRATE,EXT2_MAX_ACCELERATION,EXT2_MAX_START_FEEDRATE,0,EXT2_WATCHPERIOD
-        ,EXT2_WAIT_RETRACT_TEMP,EXT2_WAIT_RETRACT_UNITS
+        2, EXT2_X_OFFSET, EXT2_Y_OFFSET, EXT2_STEPS_PER_MM, EXT2_ENABLE_PIN, EXT2_ENABLE_ON, EXT2_MAX_FEEDRATE, EXT2_MAX_ACCELERATION, EXT2_MAX_START_FEEDRATE, 0, EXT2_WATCHPERIOD, EXT2_WAIT_RETRACT_TEMP, EXT2_WAIT_RETRACT_UNITS
 #ifdef USE_ADVANCE
 #ifdef ENABLE_QUADRATIC_ADVANCE
         ,EXT2_ADVANCE_K
@@ -1235,9 +1282,7 @@ Extruder extruder[NUM_EXTRUDER] =
 #endif
 #if NUM_EXTRUDER>3
     ,{
-        3,EXT3_X_OFFSET,EXT3_Y_OFFSET,EXT3_STEPS_PER_MM,EXT3_ENABLE_PIN,EXT3_ENABLE_ON,
-        EXT3_MAX_FEEDRATE,EXT3_MAX_ACCELERATION,EXT3_MAX_START_FEEDRATE,0,EXT3_WATCHPERIOD
-        ,EXT3_WAIT_RETRACT_TEMP,EXT3_WAIT_RETRACT_UNITS
+        3, EXT3_X_OFFSET, EXT3_Y_OFFSET, EXT3_STEPS_PER_MM, EXT3_ENABLE_PIN, EXT3_ENABLE_ON, EXT3_MAX_FEEDRATE, EXT3_MAX_ACCELERATION, EXT3_MAX_START_FEEDRATE, 0, EXT3_WATCHPERIOD, EXT3_WAIT_RETRACT_TEMP, EXT3_WAIT_RETRACT_UNITS
 #ifdef USE_ADVANCE
 #ifdef ENABLE_QUADRATIC_ADVANCE
         ,EXT3_ADVANCE_K
@@ -1255,9 +1300,7 @@ Extruder extruder[NUM_EXTRUDER] =
 #endif
 #if NUM_EXTRUDER>4
     ,{
-        4,EXT4_X_OFFSET,EXT4_Y_OFFSET,EXT4_STEPS_PER_MM,EXT4_ENABLE_PIN,EXT4_ENABLE_ON,
-        EXT4_MAX_FEEDRATE,EXT4_MAX_ACCELERATION,EXT4_MAX_START_FEEDRATE,0,EXT4_WATCHPERIOD
-        ,EXT4_WAIT_RETRACT_TEMP,EXT4_WAIT_RETRACT_UNITS
+        4, EXT4_X_OFFSET, EXT4_Y_OFFSET, EXT4_STEPS_PER_MM, EXT4_ENABLE_PIN, EXT4_ENABLE_ON, EXT4_MAX_FEEDRATE, EXT4_MAX_ACCELERATION, EXT4_MAX_START_FEEDRATE, 0, EXT4_WATCHPERIOD, EXT4_WAIT_RETRACT_TEMP, EXT4_WAIT_RETRACT_UNITS
 #ifdef USE_ADVANCE
 #ifdef ENABLE_QUADRATIC_ADVANCE
         ,EXT4_ADVANCE_K
@@ -1275,9 +1318,7 @@ Extruder extruder[NUM_EXTRUDER] =
 #endif
 #if NUM_EXTRUDER>5
     ,{
-        5,EXT5_X_OFFSET,EXT5_Y_OFFSET,EXT5_STEPS_PER_MM,EXT5_ENABLE_PIN,EXT5_ENABLE_ON,
-        EXT5_MAX_FEEDRATE,EXT5_MAX_ACCELERATION,EXT5_MAX_START_FEEDRATE,0,EXT5_WATCHPERIOD
-        ,EXT5_WAIT_RETRACT_TEMP,EXT5_WAIT_RETRACT_UNITS
+        5, EXT5_X_OFFSET, EXT5_Y_OFFSET, EXT5_STEPS_PER_MM, EXT5_ENABLE_PIN, EXT5_ENABLE_ON, EXT5_MAX_FEEDRATE, EXT5_MAX_ACCELERATION, EXT5_MAX_START_FEEDRATE, 0, EXT5_WATCHPERIOD, EXT5_WAIT_RETRACT_TEMP, EXT5_WAIT_RETRACT_UNITS
 #ifdef USE_ADVANCE
 #ifdef ENABLE_QUADRATIC_ADVANCE
         ,EXT5_ADVANCE_K

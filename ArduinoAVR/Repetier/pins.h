@@ -355,9 +355,15 @@ STEPPER_CURRENT_CONTROL
 #define HEATER_0_PIN       10
 #define HEATER_1_PIN       8
 #define HEATER_2_PIN       9
-#define TEMP_0_PIN         13   // ANALOG NUMBERING
+
 #define TEMP_1_PIN         14   // ANALOG NUMBERING
 #define TEMP_2_PIN         15
+
+#define TEMP_0_PIN         63 //13   // ANALOG NUMBERING
+#define TEMP_0_SCK         66
+#define TEMP_0_SS          65
+
+
 #define E0_PINS ORIG_E0_STEP_PIN,ORIG_E0_DIR_PIN,ORIG_E0_ENABLE_PIN,
 #define E1_PINS ORIG_E1_STEP_PIN,ORIG_E1_DIR_PIN,ORIG_E1_ENABLE_PIN,
 
@@ -1483,10 +1489,10 @@ STEPPER_CURRENT_CONTROL
 #define HEATER_1_PIN       8    // EXTRUDER 2 (FAN On Sprinter)
 #define HEATER_2_PIN       10   // Heated bed
 
-#define TEMP_3_PIN         8   // Thermocouple 0 ANALOG NUMBERING
 #define TEMP_0_PIN         13   // ANALOG NUMBERING
 #define TEMP_1_PIN         15   // ANALOG NUMBERING
 #define TEMP_2_PIN         -1   // ANALOG NUMBERING
+#define TEMP_3_PIN         8   // Thermocouple 0 ANALOG NUMBERING
 #define HEATER_BED_PIN     10   // BED
 #define TEMP_BED_PIN       14   // ANALOG NUMBERING
 

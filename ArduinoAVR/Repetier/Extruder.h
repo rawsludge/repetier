@@ -23,6 +23,9 @@ class TemperatureController
     uint8_t pwmIndex; ///< pwm index for output control. 0-2 = Extruder, 3 = Fan, 4 = Heated Bed
     uint8_t sensorType; ///< Type of temperature sensor.
     uint8_t sensorPin; ///< Pin to read extruder temperature.
+    uint8_t sckPin;
+    uint8_t ssPin;
+    
     int16_t currentTemperature; ///< Currenttemperature value read from sensor.
     int16_t targetTemperature; ///< Target temperature value in units of sensor.
     float currentTemperatureC; ///< Current temperature in degC.
@@ -84,7 +87,7 @@ class Extruder   // Size: 12*1 Byte+12*4 Byte+4*2Byte = 68 Byte
     int32_t extrudePosition;   ///< Current extruder position in steps.
     int16_t watchPeriod;        ///< Time in seconds, a M109 command will wait to stabalize temperature
     int16_t waitRetractTemperature; ///< Temperature to retract the filament when waiting for heatup
-    int16_t waitRetractUnits;   ///< Units to retract the filament when waiting for heatup
+    int16_t waitRetractUnits;   ///< Units to retract the filament when waiting for heatup    
 #ifdef USE_ADVANCE
 #ifdef ENABLE_QUADRATIC_ADVANCE
     float advanceK;         ///< Koefficient for advance algorithm. 0 = off

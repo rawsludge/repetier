@@ -46,7 +46,7 @@ To override EEPROM settings with config settings, set EEPROM_MODE 0
 // BASIC SETTINGS: select your board type, thermistor type, axis scaling, and endstop configuration
 
 /** Number of extruders. Maximum 6 extruders. */
-#define NUM_EXTRUDER 2
+#define NUM_EXTRUDER 1
 
 //// The following define selects which electronics board you have. Please choose the one that matches your setup
 // Gen3 PLUS for RepRap Motherboard V1.2 = 21
@@ -209,9 +209,12 @@ Overridden if EEPROM activated.*/
 // 100 is AD595
 // 101 is MAX6675
 // 102 is MAX31855
-#define EXT0_TEMPSENSOR_TYPE 1
+#define EXT0_TEMPSENSOR_TYPE 110
 // Analog input pin for reading temperatures or pin enabling SS for MAX6675
-#define EXT0_TEMPSENSOR_PIN TEMP_0_PIN
+#define EXT0_TEMPSENSOR_PIN       TEMP_0_PIN
+#define EXT0_TEMPSENSOR_SCK_PIN   TEMP_0_SCK
+#define EXT0_TEMPSENSOR_SS_PIN    TEMP_0_SS
+
 // Which pin enables the heater
 #define EXT0_HEATER_PIN HEATER_0_PIN
 #define EXT0_STEP_PIN E0_STEP_PIN
@@ -323,9 +326,9 @@ The codes are only executed for multiple extruder when changing the extruder. */
 // 99 Generic thermistor table 3
 // 100 is AD595
 // 101 is MAX6675
-#define EXT1_TEMPSENSOR_TYPE 1
+#define EXT1_TEMPSENSOR_TYPE 101
 // Analog input pin for reading temperatures or pin enabling SS for MAX6675
-#define EXT1_TEMPSENSOR_PIN TEMP_2_PIN
+#define EXT1_TEMPSENSOR_PIN TEMP_1_PIN
 // Which pin enables the heater
 #define EXT1_HEATER_PIN HEATER_1_PIN
 #define EXT1_STEP_PIN E1_STEP_PIN
@@ -545,7 +548,7 @@ Value is used for all generic tables created. */
 #define GENERIC_THERM_NUM_ENTRIES 33
 
 // uncomment the following line for MAX6675 support.
-//#define SUPPORT_MAX6675
+#define SUPPORT_MAX6675
 // uncomment the following line for MAX31855 support.
 //#define SUPPORT_MAX31855
 
