@@ -62,6 +62,10 @@ public:
     static float homingFeedrate[];
     static float maxAccelerationMMPerSquareSecond[];
     static float maxTravelAccelerationMMPerSquareSecond[];
+    static float endStopXBackOnHome; //ENDSTOP_X_BACK_ON_HOME
+    static float endStopYBackOnHome; //ENDSTOP_Y_BACK_ON_HOME    
+    static float endStopZBackOnHome; //ENDSTOP_Z_BACK_ON_HOME
+    
     static unsigned long maxPrintAccelerationStepsPerSquareSecond[];
     static unsigned long maxTravelAccelerationStepsPerSquareSecond[];
     static uint8_t relativeCoordinateMode;    ///< Determines absolute (false) or relative Coordinates (true).

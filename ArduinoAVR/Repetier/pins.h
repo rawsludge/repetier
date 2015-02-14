@@ -333,8 +333,8 @@ STEPPER_CURRENT_CONTROL
 #define ORIG_Z_STEP_PIN         46
 #define ORIG_Z_DIR_PIN          48
 #define ORIG_Z_ENABLE_PIN       62
-#define ORIG_Z_MIN_PIN          18
-#define ORIG_Z_MAX_PIN          19
+#define ORIG_Z_MIN_PIN          19
+#define ORIG_Z_MAX_PIN          -1
 
 #define ORIG_E0_STEP_PIN         26
 #define ORIG_E0_DIR_PIN          28
@@ -356,10 +356,11 @@ STEPPER_CURRENT_CONTROL
 #define HEATER_1_PIN       8
 #define HEATER_2_PIN       9
 
+#define TEMP_0_PIN         13   // ANALOG NUMBERING
 #define TEMP_1_PIN         14   // ANALOG NUMBERING
 #define TEMP_2_PIN         15
 
-#define TEMP_0_PIN         63 //13   // ANALOG NUMBERING
+//#define TEMP_0_PIN         63 //13   // ANALOG NUMBERING
 #define TEMP_0_SCK         66
 #define TEMP_0_SS          65
 

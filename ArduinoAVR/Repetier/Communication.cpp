@@ -339,6 +339,10 @@ FSTRINGVALUE(Com::tEPRExtruderCoolerSpeed,"extruder cooler speed [0-255]")
 FSTRINGVALUE(Com::tEPRAdvanceK,"advance K [0=off]")
 FSTRINGVALUE(Com::tEPRAdvanceL,"advance L [0=off]")
 
+FSTRINGVALUE(Com::tEPREndStopXBackOnHHome,"End Stop X Back On Home [mm]");
+FSTRINGVALUE(Com::tEPREndStopYBackOnHHome,"End Stop Y Back On Home [mm]");
+FSTRINGVALUE(Com::tEPREndStopZBackOnHHome,"End Stop Z Back On Home [mm]");
+
 #endif
 #if SDSUPPORT
 FSTRINGVALUE(Com::tSDRemoved,UI_TEXT_SD_REMOVED)

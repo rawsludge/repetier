@@ -108,13 +108,13 @@ If a motor turns in the wrong direction change INVERT_X_DIR or INVERT_Y_DIR.
 
 
 
-#define Y_STEP_PIN ORIG_Z_STEP_PIN
-#define Y_DIR_PIN ORIG_Z_DIR_PIN
-#define Y_ENABLE_PIN ORIG_Z_ENABLE_PIN
+#define Y_STEP_PIN ORIG_Y_STEP_PIN
+#define Y_DIR_PIN ORIG_Y_DIR_PIN
+#define Y_ENABLE_PIN ORIG_Y_ENABLE_PIN
 
-#define Z_STEP_PIN ORIG_Y_STEP_PIN
-#define Z_DIR_PIN ORIG_Y_DIR_PIN
-#define Z_ENABLE_PIN ORIG_Y_ENABLE_PIN
+#define Z_STEP_PIN ORIG_Z_STEP_PIN
+#define Z_DIR_PIN ORIG_Z_DIR_PIN
+#define Z_ENABLE_PIN ORIG_Z_ENABLE_PIN
 
 
 #define ENDSTOP_X_BACK_ON_HOME 1
@@ -209,7 +209,7 @@ Overridden if EEPROM activated.*/
 // 100 is AD595
 // 101 is MAX6675
 // 102 is MAX31855
-#define EXT0_TEMPSENSOR_TYPE 110
+#define EXT0_TEMPSENSOR_TYPE 1
 // Analog input pin for reading temperatures or pin enabling SS for MAX6675
 #define EXT0_TEMPSENSOR_PIN       TEMP_0_PIN
 #define EXT0_TEMPSENSOR_SCK_PIN   TEMP_0_SCK
@@ -555,9 +555,9 @@ Value is used for all generic tables created. */
 // ############# Heated bed configuration ########################
 
 /** \brief Set true if you have a heated bed conected to your board, false if not */
-#define HAVE_HEATED_BED false
+#define HAVE_HEATED_BED true
 
-#define HEATED_BED_MAX_TEMP 115
+#define HEATED_BED_MAX_TEMP 120
 /** Skip M190 wait, if heated bed is already within x degrees. Fixed numbers only, 0 = off. */
 #define SKIP_M190_IF_WITHIN 3
 
@@ -621,14 +621,15 @@ on this endstop.
 #define ENDSTOP_PULLUP_X_MIN false
 #define ENDSTOP_PULLUP_Y_MIN false
 #define ENDSTOP_PULLUP_Z_MIN false
+
 #define ENDSTOP_PULLUP_X_MAX true
 #define ENDSTOP_PULLUP_Y_MAX true
 #define ENDSTOP_PULLUP_Z_MAX true
 
 //set to true to invert the logic of the endstops
-#define ENDSTOP_X_MIN_INVERTING true
-#define ENDSTOP_Y_MIN_INVERTING true
-#define ENDSTOP_Z_MIN_INVERTING true
+#define ENDSTOP_X_MIN_INVERTING false
+#define ENDSTOP_Y_MIN_INVERTING false
+#define ENDSTOP_Z_MIN_INVERTING false
 
 #define ENDSTOP_X_MAX_INVERTING false
 #define ENDSTOP_Y_MAX_INVERTING false
@@ -639,6 +640,7 @@ on this endstop.
 #define MIN_HARDWARE_ENDSTOP_X true
 #define MIN_HARDWARE_ENDSTOP_Y true
 #define MIN_HARDWARE_ENDSTOP_Z true
+
 #define MAX_HARDWARE_ENDSTOP_X false
 #define MAX_HARDWARE_ENDSTOP_Y false
 #define MAX_HARDWARE_ENDSTOP_Z false
@@ -662,9 +664,9 @@ on this endstop.
 #define DISABLE_E false
 
 // Inverting axis direction
-#define INVERT_X_DIR true
+#define INVERT_X_DIR false
 #define INVERT_Y_DIR false
-#define INVERT_Z_DIR true
+#define INVERT_Z_DIR false
 
 //// ENDSTOP SETTINGS:
 // Sets direction of endstops when homing; 1=MAX, -1=MIN
@@ -869,14 +871,15 @@ own weight, so this is nearly never needed. */
 #define Y_BACKLASH 0
 
 /** Comment this to disable ramp acceleration */
-#define RAMP_ACCELERATION 1
+#define RAMP_ACCELERATION 0
 
 /** If your stepper needs a longer high signal then given, you can add a delay here.
 The delay is realized as a simple loop wasting time, which is not available for other
 computations. So make it as low as possible. For the most common drivers no delay is needed, as the
 included delay is already enough.
 */
-#define STEPPER_HIGH_DELAY 0
+
+#define STEPPER_HIGH_DELAY 2
 
 /** The firmware can only handle 16000Hz interrupt frequency cleanly. If you need higher speeds
 a faster solution is needed, and this is to double/quadruple the steps in one interrupt call.
@@ -1209,7 +1212,7 @@ The following settings override uiconfig.h!
 14 = OpenHardware.co.za LCD2004 V2014
 15 = Sanguinololu + Panelolu2
 */
-#define FEATURE_CONTROLLER 11
+#define FEATURE_CONTROLLER 2
 
 /**
 Select the language to use.
@@ -1231,7 +1234,7 @@ Select the language to use.
 
 
 /** Animate switches between menus etc. */
-#define UI_ANIMATION true
+#define UI_ANIMATION false
 
 /** How many ms should a single page be shown, until it is switched to the next one.*/
 #define UI_PAGES_DURATION 4000
