@@ -618,9 +618,9 @@ A good start is 30 lower then the optimal value. You need to leave room for cool
 use a mechanical endstop connected with GND. Set value to false for no pullup
 on this endstop.
 */
-#define ENDSTOP_PULLUP_X_MIN false
-#define ENDSTOP_PULLUP_Y_MIN false
-#define ENDSTOP_PULLUP_Z_MIN false
+#define ENDSTOP_PULLUP_X_MIN true
+#define ENDSTOP_PULLUP_Y_MIN true
+#define ENDSTOP_PULLUP_Z_MIN true
 
 #define ENDSTOP_PULLUP_X_MAX true
 #define ENDSTOP_PULLUP_Y_MAX true
@@ -1254,7 +1254,7 @@ info pages with next/previous button/click-encoder */
 Unfotunately, the encoder have a different count of phase changes between clicks.
 Select an encoder speed from 0 = fastest to 2 = slowest that results in one menu move per click.
 */
-#define UI_ENCODER_SPEED 1
+#define UI_ENCODER_SPEED 2
 
 /* There are 2 ways to change positions. You can move by increments of 1/0.1 mm resulting in more menu entries
 and requiring many turns on your encode. The alternative is to enable speed dependent positioning. It will change
