@@ -298,9 +298,9 @@ The codes are only executed for multiple extruder when changing the extruder. */
 #define EXT0_SELECT_COMMANDS "M117 Extruder 1"
 #define EXT0_DESELECT_COMMANDS ""
 /** The extruder cooler is a fan to cool the extruder when it is heating. If you turn the etxruder on, the fan goes on. */
-#define EXT0_EXTRUDER_COOLER_PIN -1
+#define EXT0_EXTRUDER_COOLER_PIN FAN2_PIN
 /** PWM speed for the cooler fan. 0=off 255=full speed */
-#define EXT0_EXTRUDER_COOLER_SPEED 255
+#define EXT0_EXTRUDER_COOLER_SPEED 128
 
 
 // =========================== Configuration for second extruder ========================
@@ -1229,8 +1229,8 @@ Select the language to use.
 #define UI_LANGUAGE 0
 
 // This is line 2 of the status display at startup. Change to your like.
-#define UI_PRINTER_NAME "Defne"
-#define UI_PRINTER_COMPANY "Defne Muh"
+#define UI_PRINTER_NAME "Eda "
+#define UI_PRINTER_COMPANY "Home Made"
 
 
 /** Animate switches between menus etc. */

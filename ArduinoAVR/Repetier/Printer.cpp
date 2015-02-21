@@ -685,6 +685,10 @@ void Printer::setup()
     SET_OUTPUT(FAN_PIN);
     WRITE(FAN_PIN,LOW);
 #endif
+#if FAN2_PIN > -1
+    SET_OUTPUT(FAN2_PIN);
+    WRITE(FAN2_PIN,LOW);
+#endif
 #if FAN_BOARD_PIN>-1
     SET_OUTPUT(FAN_BOARD_PIN);
     WRITE(FAN_BOARD_PIN,LOW);
