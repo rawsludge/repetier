@@ -212,6 +212,7 @@ Overridden if EEPROM activated.*/
 #define EXT0_TEMPSENSOR_TYPE 1
 // Analog input pin for reading temperatures or pin enabling SS for MAX6675
 #define EXT0_TEMPSENSOR_PIN       TEMP_0_PIN
+
 #define EXT0_TEMPSENSOR_SCK_PIN   TEMP_0_SCK
 #define EXT0_TEMPSENSOR_SS_PIN    TEMP_0_SS
 
@@ -300,7 +301,7 @@ The codes are only executed for multiple extruder when changing the extruder. */
 /** The extruder cooler is a fan to cool the extruder when it is heating. If you turn the etxruder on, the fan goes on. */
 #define EXT0_EXTRUDER_COOLER_PIN FAN2_PIN
 /** PWM speed for the cooler fan. 0=off 255=full speed */
-#define EXT0_EXTRUDER_COOLER_SPEED 128
+#define EXT0_EXTRUDER_COOLER_SPEED 10
 
 
 // =========================== Configuration for second extruder ========================
@@ -578,7 +579,7 @@ Heat manager for heated bed:
 2 = Bang Bang, limited check every HEATED_BED_SET_INTERVAL. Use this with relay-driven beds to save life time
 3 = dead time control
 */
-#define HEATED_BED_HEAT_MANAGER 1
+#define HEATED_BED_HEAT_MANAGER 3
 /** \brief The maximum value, I-gain can contribute to the output.
 The precise values may differ for different nozzle/resistor combination.
  Overridden if EEPROM activated.
@@ -879,7 +880,7 @@ computations. So make it as low as possible. For the most common drivers no dela
 included delay is already enough.
 */
 
-#define STEPPER_HIGH_DELAY 2
+#define STEPPER_HIGH_DELAY 0
 
 /** The firmware can only handle 16000Hz interrupt frequency cleanly. If you need higher speeds
 a faster solution is needed, and this is to double/quadruple the steps in one interrupt call.
@@ -891,7 +892,7 @@ additional stepper interrupts with all it's overhead. As a result you can go as 
 /** If you need frequencies off more then 30000 you definitely need to enable this. If you have only 1/8 stepping
 enabling this may cause to stall your moves when 20000Hz is reached.
 */
-#define ALLOW_QUADSTEPPING true
+#define ALLOW_QUADSTEPPING false
 /** If you reach STEP_DOUBLER_FREQUENCY the firmware will do 2 or 4 steps with nearly no delay. That can be too fast
 for some printers causing an early stall.
 
@@ -992,7 +993,7 @@ For more informations, read the wiki.
 
 Uncomment to allow a quadratic advance dependency. Linear is the dominant value, so no real need
 to activate the quadratic term. Only adds lots of computations and storage usage. */
-#define ENABLE_QUADRATIC_ADVANCE
+//#define ENABLE_QUADRATIC_ADVANCE
 
 
 // ##########################################################################################
@@ -1274,7 +1275,7 @@ same setting.
 /** \brief Lowest repeat time. */
 #define UI_KEY_MIN_REPEAT 50
 
-#define FEATURE_BEEPER true
+#define FEATURE_BEEPER false
 /**
 Beeper sound definitions for short beeps during key actions
 and longer beeps for important actions.
@@ -1297,7 +1298,7 @@ Values must be in range 1..255
 #define UI_SET_MIN_HEATED_BED_TEMP  55
 #define UI_SET_MAX_HEATED_BED_TEMP 120
 #define UI_SET_MIN_EXTRUDER_TEMP   160
-#define UI_SET_MAX_EXTRUDER_TEMP   270
+#define UI_SET_MAX_EXTRUDER_TEMP   280
 #define UI_SET_EXTRUDER_FEEDRATE 2 // mm/sec
 #define UI_SET_EXTRUDER_RETRACT_DISTANCE 3 // mm
 
