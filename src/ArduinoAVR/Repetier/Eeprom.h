@@ -122,6 +122,11 @@ have problems with other modules using the eeprom */
 #define EPR_RETRACTION_UNDO_SPEED 1016
 #define EPR_AUTORETRACT_ENABLED 1018
 
+#define EPR_ENDSTOP_X_BACK_ON_HOME 1020
+#define EPR_ENDSTOP_Y_BACK_ON_HOME 1024
+#define EPR_ENDSTOP_Z_BACK_ON_HOME 1028
+
+
 #if EEPROM_MODE != 0
 #define EEPROM_FLOAT(x) HAL::eprGetFloat(EPR_##x)
 #define EEPROM_INT32(x) HAL::eprGetInt32(EPR_##x)

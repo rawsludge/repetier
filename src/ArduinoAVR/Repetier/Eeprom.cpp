@@ -68,6 +68,10 @@ void EEPROM::restoreEEPROMSettingsFromConfiguration()
     Printer::homingFeedrate[X_AXIS] = HOMING_FEEDRATE_X;
     Printer::homingFeedrate[Y_AXIS] = HOMING_FEEDRATE_Y;
     Printer::homingFeedrate[Z_AXIS] = HOMING_FEEDRATE_Z;
+    Printer::endStopXBackOnHome = ENDSTOP_X_BACK_ON_HOME;
+    Printer::endStopYBackOnHome = ENDSTOP_Y_BACK_ON_HOME;    
+    Printer::endStopZBackOnHome = ENDSTOP_Z_BACK_ON_HOME;
+    
     Printer::maxJerk = MAX_JERK;
 #if DRIVE_SYSTEM != DELTA
     Printer::maxZJerk = MAX_ZJERK;
@@ -317,6 +321,11 @@ void EEPROM::storeDataIntoEEPROM(uint8_t corrupted)
     HAL::eprSetFloat(EPR_X_HOMING_FEEDRATE,Printer::homingFeedrate[X_AXIS]);
     HAL::eprSetFloat(EPR_Y_HOMING_FEEDRATE,Printer::homingFeedrate[Y_AXIS]);
     HAL::eprSetFloat(EPR_Z_HOMING_FEEDRATE,Printer::homingFeedrate[Z_AXIS]);
+
+    HAL::eprSetFloat(EPR_ENDSTOP_X_BACK_ON_HOME, Printer::endStopXBackOnHome);
+    HAL::eprSetFloat(EPR_ENDSTOP_Y_BACK_ON_HOME, Printer::endStopYBackOnHome);    
+    HAL::eprSetFloat(EPR_ENDSTOP_Z_BACK_ON_HOME, Printer::endStopZBackOnHome);
+    
     HAL::eprSetFloat(EPR_MAX_JERK,Printer::maxJerk);
 #if DRIVE_SYSTEM != DELTA
     HAL::eprSetFloat(EPR_MAX_ZJERK,Printer::maxZJerk);
@@ -445,6 +454,11 @@ void EEPROM::initalizeUncached()
     HAL::eprSetFloat(EPR_Z_PROBE_Y2,Z_PROBE_Y2);
     HAL::eprSetFloat(EPR_Z_PROBE_X3,Z_PROBE_X3);
     HAL::eprSetFloat(EPR_Z_PROBE_Y3,Z_PROBE_Y3);
+
+    HAL::eprSetFloat(EPR_ENDSTOP_X_BACK_ON_HOME, ENDSTOP_X_BACK_ON_HOME);
+    HAL::eprSetFloat(EPR_ENDSTOP_Y_BACK_ON_HOME, ENDSTOP_Y_BACK_ON_HOME);
+    HAL::eprSetFloat(EPR_ENDSTOP_Z_BACK_ON_HOME, ENDSTOP_Z_BACK_ON_HOME);
+    
     HAL::eprSetFloat(EPR_AXISCOMP_TANXY,AXISCOMP_TANXY);
     HAL::eprSetFloat(EPR_AXISCOMP_TANYZ,AXISCOMP_TANYZ);
     HAL::eprSetFloat(EPR_AXISCOMP_TANXZ,AXISCOMP_TANXZ);
@@ -501,6 +515,11 @@ void EEPROM::readDataFromEEPROM()
     Printer::homingFeedrate[X_AXIS] = HAL::eprGetFloat(EPR_X_HOMING_FEEDRATE);
     Printer::homingFeedrate[Y_AXIS] = HAL::eprGetFloat(EPR_Y_HOMING_FEEDRATE);
     Printer::homingFeedrate[Z_AXIS] = HAL::eprGetFloat(EPR_Z_HOMING_FEEDRATE);
+    
+    Printer::endStopXBackOnHome = HAL::eprGetFloat(EPR_ENDSTOP_X_BACK_ON_HOME);
+    Printer::endStopYBackOnHome = HAL::eprGetFloat(EPR_ENDSTOP_Y_BACK_ON_HOME);    
+    Printer::endStopZBackOnHome = HAL::eprGetFloat(EPR_ENDSTOP_Z_BACK_ON_HOME);
+    
     Printer::maxJerk = HAL::eprGetFloat(EPR_MAX_JERK);
 #if DRIVE_SYSTEM!=DELTA
     Printer::maxZJerk = HAL::eprGetFloat(EPR_MAX_ZJERK);
@@ -904,6 +923,11 @@ void EEPROM::writeSettings()
 #endif
     writeFloat(EPR_RETRACTION_UNDO_SPEED,Com::tEPRRetractionUndoSpeed);
 #endif
+
+    writeFloat(EPR_ENDSTOP_X_BACK_ON_HOME,Com::tEPREndStopXBackOnHHome);
+    writeFloat(EPR_ENDSTOP_Y_BACK_ON_HOME,Com::tEPREndStopYBackOnHHome);
+    writeFloat(EPR_ENDSTOP_Z_BACK_ON_HOME,Com::tEPREndStopZBackOnHHome);
+
     // now the extruder
     for(uint8_t i = 0; i < NUM_EXTRUDER; i++)
     {

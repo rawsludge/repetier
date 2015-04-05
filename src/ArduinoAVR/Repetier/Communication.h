@@ -335,6 +335,9 @@ FSTRINGVAR(tEPRDistanceRetractHeating)
 FSTRINGVAR(tEPRExtruderCoolerSpeed)
 FSTRINGVAR(tEPRAdvanceK)
 FSTRINGVAR(tEPRAdvanceL)
+FSTRINGVAR(tEPREndStopXBackOnHHome);
+FSTRINGVAR(tEPREndStopYBackOnHHome);
+FSTRINGVAR(tEPREndStopZBackOnHHome);
 #endif
 #if SDSUPPORT
 FSTRINGVAR(tSDRemoved)

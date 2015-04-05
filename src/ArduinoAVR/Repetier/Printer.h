@@ -154,6 +154,11 @@ public:
     static float maxTravelAccelerationMMPerSquareSecond[];
     static unsigned long maxPrintAccelerationStepsPerSquareSecond[];
     static unsigned long maxTravelAccelerationStepsPerSquareSecond[];
+
+    static float endStopXBackOnHome; //ENDSTOP_X_BACK_ON_HOME
+    static float endStopYBackOnHome; //ENDSTOP_Y_BACK_ON_HOME    
+    static float endStopZBackOnHome; //ENDSTOP_Z_BACK_ON_HOME
+    
     static uint8_t relativeCoordinateMode;    ///< Determines absolute (false) or relative Coordinates (true).
     static uint8_t relativeExtruderCoordinateMode;  ///< Determines Absolute or Relative E Codes while in Absolute Coordinates mode. E is always relative in Relative Coordinates mode.
 
